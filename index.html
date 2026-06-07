@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Massively Multimodal Foundation Models — NeurIPS 2026 Workshop</title>
+  <meta name="description" content="NeurIPS 2026 Workshop on Massively Multimodal Foundation Models. More modalities, harder problems. Paris, France." />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+    /* Reset */
+    html { box-sizing: border-box; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    *, *::before, *::after { box-sizing: inherit; }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #1e293b;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(14, 165, 233, 0.10) 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        #f8fafc;
+      background-attachment: fixed;
+    }
+
+    a { color: #4f46e5; }
+    a:hover { color: #3730a3; }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+      color: #fff;
+      border-bottom: 3px solid #6366f1;
+    }
+    header .logo {
+      width: clamp(96px, 14vw, 140px);
+      height: auto;
+      display: block;
+      margin: 0 auto 1.25rem;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+    }
+    header h1 {
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 700;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    header .tagline {
+      font-size: 1.05rem;
+      opacity: 0.85;
+      margin: 0.5rem 0;
+      font-style: italic;
+    }
+    header .meta {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      margin: 0.25rem 0;
+    }
+    header .meta a { color: #c7d2fe; }
+    header .meta a:hover { color: #fff; }
+    header .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 0.25rem 0.9rem;
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+    }
+
+    /* Sticky Navigation (separate from header) */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
+      text-align: center;
+      padding: 0.85rem 1rem;
+      line-height: 1.4;
+    }
+    .nav-bar a {
+      margin: 0 0.6rem;
+      text-decoration: none;
+      color: #334155;
+      font-weight: 600;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      transition: color 0.2s;
+      position: relative;
+      padding: 0.25rem 0;
+    }
+    .nav-bar a:hover { color: #4f46e5; }
+    .nav-bar a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      height: 2px;
+      background: #4f46e5;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.2s ease;
+    }
+    .nav-bar a:hover::after { transform: scaleX(1); }
+
+    /* Sections */
+    section {
+      max-width: 820px;
+      margin: 3rem auto;
+      padding: 2.25rem;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+      border: 1px solid #e2e8f0;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 1.25rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid #e0e7ff;
+      color: #1e1b4b;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 1.5rem 0 0.75rem;
+      color: #312e81;
+    }
+
+    ul, ol { padding-left: 1.25rem; }
+    li { margin-bottom: 0.4rem; }
+
+    /* Schedule table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+    table th {
+      background: #f1f5f9;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #e2e8f0;
+    }
+    table td {
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #e2e8f0;
+      vertical-align: top;
+      transition: background 0.15s ease;
+    }
+    table tbody tr:hover td {
+      background: #eef2ff;
+    }
+    tr.break td {
+      background: #f8fafc;
+      color: #64748b;
+      font-style: italic;
+    }
+    table tbody tr.break:hover td {
+      background: #f1f5f9;
+    }
+    .talk-title {
+      font-style: italic;
+      color: #4f46e5;
+    }
+
+    /* People grid */
+    .people {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .person {
+      text-align: center;
+      padding: 0.75rem 0.5rem;
+      border-radius: 10px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .person:hover {
+      transform: translateY(-3px);
+      background: #fafbff;
+      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.10);
+    }
+    .person .headshot {
+      width: clamp(72px, 12vw, 96px);
+      height: clamp(72px, 12vw, 96px);
+      border-radius: 50%;
+      object-fit: cover;
+      display: inline-block;
+      margin-bottom: 0.4rem;
+      border: 2px solid #e0e7ff;
+    }
+    .person .initials {
+      width: clamp(72px, 12vw, 96px);
+      height: clamp(72px, 12vw, 96px);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+    .person .name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin: 0.2rem 0;
+    }
+    .person .affiliation {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin: 0;
+    }
+    .person .talk {
+      font-size: 0.78rem;
+      color: #4f46e5;
+      font-style: italic;
+      margin: 0.25rem 0 0;
+    }
+
+    /* Initials color palette */
+    .init-1 { background: #4f46e5; }
+    .init-2 { background: #7c3aed; }
+    .init-3 { background: #0891b2; }
+    .init-4 { background: #059669; }
+    .init-5 { background: #d97706; }
+    .init-6 { background: #dc2626; }
+    .init-7 { background: #4338ca; }
+    .init-8 { background: #9333ea; }
+    .init-9 { background: #0d9488; }
+    .init-10 { background: #ca8a04; }
+    .init-11 { background: #be185d; }
+    .init-12 { background: #1d4ed8; }
+
+    /* Topics grid */
+    .topics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .topic-card {
+      border-radius: 10px;
+      padding: 1.25rem;
+      border-left: 4px solid;
+      background: #fff;
+      border-top: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .topic-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+    }
+    .topic-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0 0 0.6rem;
+    }
+    .topic-card ul {
+      font-size: 0.85rem;
+      padding-left: 1rem;
+      margin: 0;
+    }
+    .topic-card li { margin-bottom: 0.3rem; }
+
+    .topic-tokens   { border-left-color: #4f46e5; background: #eef2ff; }
+    .topic-tokens h4   { color: #3730a3; }
+    .topic-pretrain { border-left-color: #0891b2; background: #ecfeff; }
+    .topic-pretrain h4 { color: #155e75; }
+    .topic-robust   { border-left-color: #059669; background: #ecfdf5; }
+    .topic-robust h4   { color: #065f46; }
+    .topic-safety   { border-left-color: #db2777; background: #fdf2f8; }
+    .topic-safety h4   { color: #9d174d; }
+
+    /* Dates list */
+    .dates {
+      list-style: none;
+      padding: 0;
+    }
+    .dates li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .dates li:last-child { border-bottom: none; }
+    .dates .date-label { font-weight: 600; }
+    .dates .date-value { color: #4f46e5; }
+
+    /* Committee list */
+    .committee-list {
+      column-count: 2;
+      column-gap: 2.5rem;
+      font-size: 0.88rem;
+      line-height: 2.1;
+      color: #475569;
+      word-spacing: 0.15rem;
+    }
+
+    /* Sponsors */
+    .sponsors {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .sponsors span {
+      font-size: 0.9rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    footer a { color: #4f46e5; }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      header { padding: 2rem 1rem 1.5rem; }
+      .nav-bar { padding: 0.6rem 0.5rem; overflow-x: auto; white-space: nowrap; }
+      .nav-bar a { margin: 0 0.4rem; font-size: 0.8rem; }
+      section { margin: 2rem 0.5rem; padding: 1.25rem; border-radius: 8px; }
+      .topics-grid { grid-template-columns: 1fr; }
+      .committee-list { column-count: 1; line-height: 1.9; }
+      .people { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img class="logo" src="logo.svg" alt="Workshop logo" />
+  <h1>Massively Multimodal Foundation Models</h1>
+  <p class="tagline">More modalities, harder problems.</p>
+  <p class="meta">A workshop at <a href="https://neurips.cc/Conferences/2026" target="_blank" rel="noopener">NeurIPS 2026</a></p>
+  <p class="meta">Paris, France &middot; December 2026</p>
+  <span class="badge">Supported by Horizon Europe &middot; DVPS &middot; ELLIOT &middot; ELLIS</span>
+</header>
+
+<nav class="nav-bar">
+  <a href="#about">About</a>
+  <a href="#speakers">Speakers</a>
+  <a href="#schedule">Schedule</a>
+  <a href="#cfp">Call for Papers</a>
+  <a href="#organizers">Organizers</a>
+  <a href="#committee">Committee</a>
+</nav>
+
+<!-- ============ ABOUT + TOPICS ============ -->
+<section id="about">
+  <h2>About</h2>
+  <p>
+    Multimodal ML has come a long way, but most of the science still assumes two modalities: vision and language. The moment we add audio, video, time-series, wearable sensors, satellite imagery, or clinical signals, the usual recipes for tokenization, fusion, and pretraining stop being obvious.
+  </p>
+  <p>
+    This workshop takes the <strong>modality itself</strong> as the unit of study. What is actually learnable about each one? Which structural properties (causality, dimensionality, sampling regime, physical grounding) transfer, and which don't? How should those answers shape the way we build and reuse models?
+  </p>
+  <p>
+    We want talks and papers with concrete problem statements and empirical findings, not survey-level overviews. Theoretical work is equally welcome.
+  </p>
+
+  <h3 style="margin-top:2rem;">Topics</h3>
+  <div class="topics-grid">
+    <div class="topic-card topic-tokens">
+      <h4>Tokenization &amp; Representation</h4>
+      <ul>
+        <li>Discrete vs. continuous tokens across image, audio, video, depth</li>
+        <li>Neural codecs and their downstream effects</li>
+        <li>Native-resolution encoding; modality-specific positional schemes</li>
+        <li>When (and why) cross-modal representations converge</li>
+      </ul>
+    </div>
+    <div class="topic-card topic-pretrain">
+      <h4>Pretraining &amp; Architectures</h4>
+      <ul>
+        <li>Contrastive, masked, generative, and JEPA-style objectives at &gt;2 modalities</li>
+        <li>Curriculum design and modality introduction schedules</li>
+        <li>Early vs. late fusion; frozen vs. jointly trained encoders</li>
+        <li>MoE, parameter sharing, modality routing at scale</li>
+      </ul>
+    </div>
+    <div class="topic-card topic-robust">
+      <h4>Robustness &amp; Generalization</h4>
+      <ul>
+        <li>Missing modalities at inference; graceful degradation</li>
+        <li>Sensor shift in physically grounded inputs (LiDAR, SAR, physiology)</li>
+        <li>Continual pretraining without catastrophic forgetting</li>
+        <li>Synergy, redundancy, and uniqueness across input streams</li>
+      </ul>
+    </div>
+    <div class="topic-card topic-safety">
+      <h4>Safety &amp; Evaluation</h4>
+      <ul>
+        <li>Cross-modal hallucination: where it comes from, how to catch it</li>
+        <li>Data scarcity and biases in underrepresented modalities</li>
+        <li>Rare concept-modality combinations in high-stakes settings</li>
+        <li>Benchmarks that resist unimodal shortcuts</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SPEAKERS ============ -->
+<section id="speakers">
+  <h2>Invited Speakers</h2>
+  <div class="people">
+
+    <div class="person">
+      <div class="initials init-1">CS</div>
+      <p class="name">Cordelia Schmid</p>
+      <p class="affiliation">INRIA, France</p>
+      <p class="talk">Self-supervised audio-visual learning</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-2">PI</div>
+      <p class="name">Phillip Isola</p>
+      <p class="affiliation">MIT CSAIL</p>
+      <p class="talk">Unpaired multimodal alignment theory</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-3">PL</div>
+      <p class="name">Paul Pu Liang</p>
+      <p class="affiliation">MIT Media Lab</p>
+      <p class="talk">Foundations of multisensory AI</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-4">NZ</div>
+      <p class="name">Neil Zeghidour</p>
+      <p class="affiliation">Kyutai, Paris</p>
+      <p class="talk">Discrete representations for audio</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-5">ZA</div>
+      <p class="name">Zeynep Akata</p>
+      <p class="affiliation">TU Munich / Helmholtz Munich</p>
+      <p class="talk">Aligning modalities when paired data is scarce</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-6">JBA</div>
+      <p class="name">Jean-Baptiste Alayrac</p>
+      <p class="affiliation">Google DeepMind</p>
+      <p class="talk">Interleaved pretraining &amp; few-shot learners</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-7">SV</div>
+      <p class="name">Sagar Vaze</p>
+      <p class="affiliation">Mistral AI</p>
+      <p class="talk">Vision encoder design &amp; visual tokenization</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-8">MB</div>
+      <p class="name">Matthias Bethge</p>
+      <p class="affiliation">U. of Tübingen / ELLIS</p>
+      <p class="talk">Continual multimodal updating</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-9">RR</div>
+      <p class="name">Robin Rombach</p>
+      <p class="affiliation">Black Forest Labs</p>
+      <p class="talk">Latent diffusion &amp; flow matching</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-10">SX</div>
+      <p class="name">Saining Xie</p>
+      <p class="affiliation">NYU / AMI Labs</p>
+      <p class="talk">Diffusion Transformers &amp; multimodal probing</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-11">VDS</div>
+      <p class="name">Virginia De Sa</p>
+      <p class="affiliation">UC San Diego</p>
+      <p class="talk">Cross-modal co-occurrence &amp; self-supervision</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-12">SD</div>
+      <p class="name">Sander Dieleman</p>
+      <p class="affiliation">Google DeepMind</p>
+      <p class="talk">Generative objectives across modalities</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-1">BS</div>
+      <p class="name">Bernt Schiele</p>
+      <p class="affiliation">MPI for Informatics</p>
+      <p class="talk">VLM pretraining &amp; multi-image evaluation</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-3">LB</div>
+      <p class="name">Laurent Besacier</p>
+      <p class="affiliation">Naver Labs Europe</p>
+      <p class="talk">Multimodal speech &amp; self-supervised models</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ SCHEDULE ============ -->
+<section id="schedule">
+  <h2>Tentative Schedule</h2>
+  <p>All times are local (Paris, CET). Invited talks: 30 min + 15 min discussion. Contributed talks: 12 min + 3 min Q&amp;A.</p>
+
+  <table>
+    <thead>
+      <tr><th>Time</th><th>Event</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>08:30–08:45</td><td>Authors put up posters</td></tr>
+      <tr><td>08:45–09:00</td><td><strong>Opening Remarks</strong></td></tr>
+      <tr>
+        <td>09:00–09:45</td>
+        <td><strong>Invited Talk 1</strong> — Cordelia Schmid (INRIA)<br>
+          <span class="talk-title">Seeing Through Sound: Self-Supervised Learning from Audio-Visual Correspondence</span></td>
+      </tr>
+      <tr>
+        <td>09:45–10:30</td>
+        <td><strong>Invited Talk 2</strong> — Paul Pu Liang (MIT Media Lab)<br>
+          <span class="talk-title">Beyond Vision and Language: Foundations of Multisensory Artificial Intelligence</span></td>
+      </tr>
+      <tr class="break"><td>10:30–11:00</td><td>Coffee Break</td></tr>
+      <tr>
+        <td>11:00–11:45</td>
+        <td><strong>Invited Talk 3</strong> — Neil Zeghidour (Kyutai, Paris)<br>
+          <span class="talk-title">Tokens All the Way Down: Discrete Representations for Audio in Multimodal Models</span></td>
+      </tr>
+      <tr>
+        <td>11:45–12:15</td>
+        <td><strong>Contributed Talks I</strong> — 2 &times; 15 min selected from accepted submissions</td>
+      </tr>
+      <tr class="break"><td>12:15–13:45</td><td>Poster Session + Lunch — All accepted papers presented</td></tr>
+      <tr>
+        <td>13:45–14:30</td>
+        <td><strong>Invited Talk 4</strong> — Zeynep Akata (TU Munich / Helmholtz Munich)<br>
+          <span class="talk-title">Learning to Align Modalities When Paired Data Is Scarce</span></td>
+      </tr>
+      <tr>
+        <td>14:30–15:15</td>
+        <td><strong>Invited Talk 5</strong> — Jean-Baptiste Alayrac (Google DeepMind)<br>
+          <span class="talk-title">Interleaved Pretraining and the Architecture of Multimodal Few-Shot Learners</span></td>
+      </tr>
+      <tr class="break"><td>15:15–15:45</td><td>Coffee Break</td></tr>
+      <tr>
+        <td>15:45–16:15</td>
+        <td><strong>Contributed Talks II</strong> — 2 &times; 15 min selected from accepted submissions</td>
+      </tr>
+      <tr>
+        <td>16:15–16:50</td>
+        <td><strong>Panel Discussion</strong><br>
+          <span class="talk-title">One latent space to bind them all: is a shared embedding across modalities a scientific goal or an engineering convenience?</span><br>
+          Moderated debate; audience participation encouraged</td>
+      </tr>
+      <tr><td>16:50–17:00</td><td><strong>Closing Remarks and Best Paper Award</strong></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ CALL FOR PAPERS ============ -->
+<section id="cfp">
+  <h2>Call for Papers</h2>
+  <p>
+    We seek contributions addressing the scientific foundations of models that process, align, and reason over many heterogeneous input modalities. We welcome works-in-progress and mature research. Purely theoretical contributions are equally welcome.
+  </p>
+  <p>
+    We particularly encourage submissions that challenge prevailing assumptions in multimodal pretraining, propose novel benchmarks for underexplored modality combinations, or provide systematic experimental evidence on open questions in architecture and training design.
+  </p>
+
+  <h3>Important Dates</h3>
+  <ul class="dates">
+    <li>
+      <span class="date-label">Call for Papers published</span>
+      <span class="date-value">July 30, 2026</span>
+    </li>
+    <li>
+      <span class="date-label">Submission portal opens</span>
+      <span class="date-value">August 25, 2026</span>
+    </li>
+    <li>
+      <span class="date-label">Paper submission deadline</span>
+      <span class="date-value">September 3, 2026 (AoE)</span>
+    </li>
+    <li>
+      <span class="date-label">Author notification</span>
+      <span class="date-value">September 22, 2026</span>
+    </li>
+  </ul>
+
+  <h3>Submission Guidelines</h3>
+  <ul>
+    <li>Submissions via <strong>OpenReview</strong> (link available August 25, 2026)</li>
+    <li>Submission instructions, reviewing workflow, and Program Committee will be announced when the portal opens</li>
+    <li>NeurIPS workshop format (extended abstract or short paper)</li>
+  </ul>
+
+  <h3>Awards</h3>
+  <ul>
+    <li><strong>Best Paper Award:</strong> ~€1,000 (sponsored by DVPS &amp; ELLIOT)</li>
+    <li><strong>Travel Grants:</strong> ~€3,000 for early-career participants</li>
+  </ul>
+</section>
+
+<!-- ============ ORGANIZERS ============ -->
+<section id="organizers">
+  <h2>Organizers</h2>
+  <div class="people">
+
+    <div class="person">
+      <div class="initials init-1">SB</div>
+      <p class="name">Sébastien Bratières</p>
+      <p class="affiliation">Translated / DVPS</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-2">YK</div>
+      <p class="name">Yiannis Kompatsiaris</p>
+      <p class="affiliation">CERTH-ITI / ELLIOT</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-3">JJ</div>
+      <p class="name">Jenia Jitsev</p>
+      <p class="affiliation">Jülich SC / LAION</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-4">LS</div>
+      <p class="name">Luca Scofano</p>
+      <p class="affiliation">Translated</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-5">LL</div>
+      <p class="name">Lorenzo Loconte</p>
+      <p class="affiliation">Pi School / DVPS</p>
+    </div>
+
+    <div class="person">
+      <div class="initials init-6">AW</div>
+      <p class="name">Alexander Waibel</p>
+      <p class="affiliation">CMU / KIT</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ COMMITTEE ============ -->
+<section id="committee">
+  <h2>Program Committee</h2>
+  <div class="committee-list">
+    Kaisar Kushibar (U. Barcelona) &middot;
+    Monika Wysoczanska (VALEO) &middot;
+    Diego Miguel Lozano (ELLIS ALC) &middot;
+    Diego Porres (CVC-CERCA) &middot;
+    Vladimir Petrik (CTU) &middot;
+    Vasileios Mezaris (CERTH) &middot;
+    Senja Pollak (JSI) &middot;
+    Joost van de Weijer (CVC-CERCA) &middot;
+    Amirpasha Mozaffari (BSC) &middot;
+    Disheng Qiu (Translated) &middot;
+    Andrea Guala (VHIR) &middot;
+    Lin Li (U. Oxford) &middot;
+    Wafa Aissa (FBK) &middot;
+    Gencer Sumbul (EPFL) &middot;
+    Amelia Jiménez-Sánchez (U. Barcelona) &middot;
+    Luca Corbucci (FBK) &middot;
+    Maximilien Houël (SISTEMA) &middot;
+    Rishubh Singh (EPFL) &middot;
+    Yaohong Yang (AALTO) &middot;
+    Wenfang Sun (U. Amsterdam) &middot;
+    Sean Benson (Amsterdam UMC) &middot;
+    Andreas Luyts (VITO) &middot;
+    Mario Jose Divan Koller (OPENCHIP) &middot;
+    Konrad Schindler (ETH Zurich) &middot;
+    Richard E. Turner (U. Cambridge) &middot;
+    Edwin Morley-Fletcher (Lynkeus) &middot;
+    Cristian Izquierdo Morcillo (U. Barcelona) &middot;
+    Nada Lavrac (JSI) &middot;
+    Chris Russell (U. Oxford) &middot;
+    Marco Gaido (FBK) &middot;
+    Will Tebbutt (U. Cambridge) &middot;
+    Dheeraj Varghese (UvA) &middot;
+    Kevin Monsalvez Pozo (U. Valencia) &middot;
+    Antonino Angi (U. Barcelona) &middot;
+    Li Mi (ETH Zurich) &middot;
+    Lukas Fischer (NXAI) &middot;
+    Leonardo Barcellona (NXAI) &middot;
+    Pere Lopez Gutierrez (VHIR) &middot;
+    Grzegorz Skorupko (U. Barcelona) &middot;
+    Dogucan Yaman (KIT) &middot;
+    Edoardo De Matteis (Pi School) &middot;
+    Àlex R. Atrio (Pi School) &middot;
+    Luca Scofano (Translated)
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <p>
+    NeurIPS 2026 Workshop on Massively Multimodal Foundation Models &middot; Paris, France<br>
+    Supported by <strong>DVPS</strong> and <strong>ELLIOT</strong> (Horizon Europe) &middot; ELLIS
+  </p>
+</footer>
+
+</body>
+</html>
